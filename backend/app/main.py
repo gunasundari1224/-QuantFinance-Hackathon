@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import assets, indicators, metrics, correlation, regime, backtest
+from app.api.v1 import assets, indicators, metrics, correlation, regime, backtest, ai
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -25,6 +25,7 @@ app.include_router(metrics.router, prefix=settings.API_V1_STR)
 app.include_router(correlation.router, prefix=settings.API_V1_STR)
 app.include_router(regime.router, prefix=settings.API_V1_STR)
 app.include_router(backtest.router, prefix=settings.API_V1_STR)
+app.include_router(ai.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():

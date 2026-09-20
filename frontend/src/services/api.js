@@ -56,5 +56,13 @@ export const api = {
   runBacktest: async (payload) => {
     const res = await axios.post(`${API_BASE_URL}/backtest/run`, payload);
     return res.data;
+  },
+
+  askAI: async (question, context) => {
+    const res = await axios.post(`${API_BASE_URL}/ai/ask`, {
+      question,
+      context
+    });
+    return res.data;
   }
 };

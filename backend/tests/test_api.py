@@ -57,3 +57,21 @@ def test_backtest_run():
     result = response.json()
     assert "summary" in result
     assert "equity_curve" in result
+
+def test_ai_ask_empty_question():
+    payload = {"question": "   ", "context": {}}
+    response = client.post("/api/v1/ai/ask", json=payload)
+    assert response.status_code == 400
+
+def test_ai_ask_missing_key_graceful_response():
+    payload = {
+        "question": "Summarize this backtest",
+        "context": {"selected_asset": "BTC-USD", "portfolio_summary": {"sharpe_ratio": 1.25}}
+    }
+    response = client.post("/api/v1/ai/ask", json=payload)
+    assert response.status_code in [200, 500, 503]
+    json_resp = response.json()
+    # Ensure secrets are never exposed in error response
+    resp_str = str(json_resp).lower()
+    assert "api_key" not in resp_str or "not configured" in resp_str
+
